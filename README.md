@@ -1,8 +1,16 @@
 # word-skill
 
-`word-skill` is a Codex skill for turning AI-generated text, Markdown drafts, and existing office documents into polished Word deliverables. It supports Chinese and English content, multiple document presets, reference-DOCX style matching, separated final/build outputs, and render-based quality checks.
+`word-skill` is a Codex skill for turning AI-generated text, Markdown drafts, plain text notes, and existing office documents into polished Word deliverables. It supports Chinese and English content, multiple document presets, reference-DOCX style matching, separated final/build outputs, table layout adjustment, citation post-processing, and render-based quality checks.
 
-`word-skill` 是一个面向 Codex/Agent 工作流的 Word 文档格式化 skill。它适合把 AI 对话产出的文本、Markdown 草稿、已有 Word 文档、报告、汇报材料、发言稿、论文等内容整理成可交付的 `.docx` 文件。
+The goal of this project is not only to "convert a file to DOCX", but to make Word output more reliable in agent workflows. It helps an AI agent check the local environment, choose an appropriate document preset, convert or reformat the source file, normalize Word styles, adjust table layout to reduce overflow risk, handle captions and inline citation superscripts, keep intermediate files away from final deliverables, and generate audit information for review before delivery.
+
+`word-skill` is useful when the final output matters: reports, briefings, speeches, proposals, meeting materials, academic manuscripts, bilingual documents, or existing Word files that need to be cleaned up and reformatted. It can also use another Word document as a style reference, so one document can be laid out according to the formatting conventions of another.
+
+`word-skill` 是一个面向 Codex/Agent 工作流的 Word 文档格式化 skill。它适合把 AI 对话产出的文本、Markdown 草稿、纯文本笔记、已有 Word 文档、报告、汇报材料、发言稿、论文等内容整理成可交付的 `.docx` 文件。
+
+这个项目的目标不是简单地“把文件转成 Word”，而是让 Agent 生成 Word 文档的过程更稳定、更可检查。它会帮助 Agent 检查本机环境，选择合适的文档预设，转换或重排源文件，统一 Word 样式，调整表格布局以降低溢出风险，处理图表题注和正文引用角标，把最终成品与中间产物分开，并生成质量审查信息，便于在交付前发现格式问题。
+
+`word-skill` 适合用于对输出质量有要求的场景，例如正式报告、汇报材料、会议材料、发言稿、项目文档、学术论文、中英文文档，以及需要重新排版的已有 Word 文件。它还支持参考另一个 Word 文件的样式来排版目标文档，适合“照着一个word模板改另一个文件”的使用方式。
 
 > License note: this repository is public source / source-available under a non-commercial license. Commercial use requires separate written permission. See [LICENSE](LICENSE).
 
@@ -22,7 +30,7 @@
 
 - Exporting AI conversation content to a clean Word document.
 - Formatting academic papers, reports, briefings, proposals, meeting materials, and speeches.
-- Reformatting one Word file according to another Word file's style.
+- Reformatting one document according to a Word template.
 - Checking whether a generated DOCX has broken tables, missing images, wrong body styles, blank renders, or citation-format issues.
 - Packaging a repeatable Word-formatting workflow for another agent.
 
