@@ -1,11 +1,13 @@
 ---
 name: word-skill
-description: Install, uninstall, convert, format, reformat, audit, and visually verify Chinese or English DOCX deliverables from TXT, Markdown, DOCX, DOC, RTF, or ODT using built-in document presets, custom saved presets, optional reference-DOCX style matching, Pandoc/LibreOffice when needed, python-docx post-processing, separated build/final output directories, style normalization, inline citation superscripting, Chinese and English caption handling, improved table styling, strict quality gates, and render QA. Use when asked to export AI conversation content to Word, format reports, briefings, speeches, papers, meeting materials, proposals, existing Word files, audit a Word deliverable, package this workflow for another agent, or reformat one document according to another Word document's style.
+description: Install, uninstall, convert, format, reformat, audit, and visually verify Chinese or English DOCX deliverables from TXT, Markdown, DOCX, DOC, RTF, or ODT in any command-capable agent environment using built-in document presets, custom saved presets, optional reference-DOCX style matching, Pandoc/LibreOffice when needed, python-docx post-processing, separated build/final output directories, style normalization, inline citation superscripting, Chinese and English caption handling, table layout adjustment, strict quality gates, and render QA. Use when asked to export AI conversation content to Word, format reports, briefings, speeches, papers, meeting materials, proposals, existing Word files, audit a Word deliverable, package this workflow for another agent, or reformat one document according to a Word template.
 ---
 
 # word-skill
 
-Use this skill to turn Chinese or English AI-generated content or existing files into polished Word deliverables. It is not limited to papers.
+Use this skill or command-line toolkit to turn Chinese or English AI-generated content or existing files into polished Word deliverables. It is not limited to papers and does not require a specific agent runtime.
+
+For non-OpenAI/Codex agents, read `agents/generic.md` and call `scripts/format_docx_document.py` directly. `agents/openai.yaml` is optional OpenAI/Codex UI metadata.
 
 Supported inputs:
 
@@ -53,7 +55,7 @@ Uninstall cleanly:
 & "<python>" "<word-skill>/scripts/uninstall_word_skill.py"
 ```
 
-Use `--target "<skills-parent-or-word-skill-dir>"` for non-default locations. Install and uninstall scripts only copy/remove the `word-skill` directory after validating its `SKILL.md`; they do not install system tools.
+Use `--target "<skills-parent-or-word-skill-dir>"` for non-default locations. For generic agent setups, set `WORD_SKILL_HOME` or `AGENT_SKILLS_DIR` to a parent skills/tools directory or an exact `word-skill` target directory. Install and uninstall scripts only copy/remove the `word-skill` directory after validating its `SKILL.md`; they do not install system tools.
 
 ## Workflow
 

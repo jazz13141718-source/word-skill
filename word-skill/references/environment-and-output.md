@@ -80,7 +80,7 @@ Never mark missing Pillow as a blocker by itself. Missing Pillow weakens blank-p
 
 ## Install And Uninstall
 
-Install the skill for the current Codex user:
+Install the skill for an agent that uses the default discovery location:
 
 ```powershell
 & "<python>" "<word-skill>\scripts\install_word_skill.py" --dry-run
@@ -93,6 +93,16 @@ Install to a custom skills directory:
 & "<python>" "<word-skill>\scripts\install_word_skill.py" --target "D:\SomeAgent\skills"
 ```
 
+Install with generic agent environment variables:
+
+```powershell
+$env:AGENT_SKILLS_DIR = "D:\SomeAgent\skills"
+& "<python>" "<word-skill>\scripts\install_word_skill.py"
+
+$env:WORD_SKILL_HOME = "D:\SomeAgent\skills"
+& "<python>" "<word-skill>\scripts\install_word_skill.py"
+```
+
 Uninstall cleanly:
 
 ```powershell
@@ -100,7 +110,7 @@ Uninstall cleanly:
 & "<python>" "<word-skill>\scripts\uninstall_word_skill.py"
 ```
 
-The scripts validate `SKILL.md` before replacing or deleting anything. They never install Pandoc, LibreOffice, Poppler, or Python packages automatically; they only report missing requirements so the user or host agent can decide how to install them.
+The scripts validate `SKILL.md` before replacing or deleting anything. They never install Pandoc, LibreOffice, Poppler, or Python packages automatically; they only report missing requirements so the user or host agent can decide how to install them. If no explicit target or generic environment variable is provided, the fallback is Codex-compatible for backward compatibility.
 
 ## Operating Requirements
 

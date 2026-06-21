@@ -1,12 +1,12 @@
 # word-skill
 
-`word-skill` is a Codex skill for turning AI-generated text, Markdown drafts, plain text notes, and existing office documents into polished Word deliverables. It supports Chinese and English content, multiple document presets, reference-DOCX style matching, separated final/build outputs, table layout adjustment, citation post-processing, and render-based quality checks.
+`word-skill` is an agent-facing Word document formatting toolkit and skill package for turning AI-generated text, Markdown drafts, plain text notes, and existing office documents into polished Word deliverables. It supports Chinese and English content, multiple document presets, reference-DOCX style matching, separated final/build outputs, table layout adjustment, citation post-processing, and render-based quality checks.
 
 The goal of this project is not only to "convert a file to DOCX", but to make Word output more reliable in agent workflows. It helps an AI agent check the local environment, choose an appropriate document preset, convert or reformat the source file, normalize Word styles, adjust table layout to reduce overflow risk, handle captions and inline citation superscripts, keep intermediate files away from final deliverables, and generate audit information for review before delivery.
 
 `word-skill` is useful when the final output matters: reports, briefings, speeches, proposals, meeting materials, academic manuscripts, bilingual documents, or existing Word files that need to be cleaned up and reformatted. It can also use another Word document as a style reference, so one document can be laid out according to the formatting conventions of another.
 
-`word-skill` 是一个面向 Codex/Agent 工作流的 Word 文档格式化 skill。它适合把 AI 对话产出的文本、Markdown 草稿、纯文本笔记、已有 Word 文档、报告、汇报材料、发言稿、论文等内容整理成可交付的 `.docx` 文件。
+`word-skill` 是一个面向各类 AI Agent 工作流的 Word 文档格式化工具包和 skill 包。它适合把 AI 对话产出的文本、Markdown 草稿、纯文本笔记、已有 Word 文档、报告、汇报材料、发言稿、论文等内容整理成可交付的 `.docx` 文件。
 
 这个项目的目标不是简单地“把文件转成 Word”，而是让 Agent 生成 Word 文档的过程更稳定、更可检查。它会帮助 Agent 检查本机环境，选择合适的文档预设，转换或重排源文件，统一 Word 样式，调整表格布局以降低溢出风险，处理图表题注和正文引用角标，把最终成品与中间产物分开，并生成质量审查信息，便于在交付前发现格式问题。
 
@@ -25,6 +25,14 @@ The goal of this project is not only to "convert a file to DOCX", but to make Wo
 - Normalize body styles, headings, page setup, footers, tables, captions, and inline citation superscripts.
 - Audit output with machine-readable `quality_audit` results.
 - Render pages through LibreOffice and `pdftoppm` so agents can visually inspect final layout.
+
+## Agent Compatibility
+
+The core formatter is a plain Python command-line tool. Any agent that can run shell commands and access local files can use it directly; it does not require Codex, OpenAI, or a specific agent runtime.
+
+- Generic agents should read [AGENTS.md](AGENTS.md) or [word-skill/agents/generic.md](word-skill/agents/generic.md), then call `word-skill/scripts/format_docx_document.py`.
+- OpenAI/Codex-compatible environments can also use [word-skill/agents/openai.yaml](word-skill/agents/openai.yaml) as optional UI metadata.
+- Install scripts support `--target` for any agent's skill/tool directory. If no target is provided, they use `WORD_SKILL_HOME` or `AGENT_SKILLS_DIR`, then the Codex-compatible `CODEX_HOME\skills\word-skill` / `~/.codex/skills/word-skill` fallback.
 
 ## Suitable For
 
@@ -76,6 +84,13 @@ Install to a custom skills directory:
 & "<python>" ".\word-skill\scripts\install_word_skill.py" --target "D:\SomeAgent\skills"
 ```
 
+Install through a generic agent environment variable:
+
+```powershell
+$env:AGENT_SKILLS_DIR = "D:\SomeAgent\skills"
+& "<python>" ".\word-skill\scripts\install_word_skill.py"
+```
+
 Uninstall cleanly:
 
 ```powershell
@@ -118,7 +133,7 @@ Audit an existing DOCX without changing it:
   --strict
 ```
 
-Format one Word file according to another Word file:
+Format one document according to a Word template:
 
 ```powershell
 & "<python>" ".\word-skill\scripts\format_docx_document.py" `
@@ -198,6 +213,7 @@ The audit checks common delivery risks, including:
 word-skill-repo/
   word-skill/
     SKILL.md
+    agents/generic.md
     agents/openai.yaml
     assets/reference.docx
     references/environment-and-output.md

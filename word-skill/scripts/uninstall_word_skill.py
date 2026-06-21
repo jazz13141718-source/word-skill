@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Cleanly uninstall word-skill from a Codex skills directory."""
+"""Cleanly uninstall word-skill from an agent skills or tools directory."""
 from __future__ import annotations
 
 import argparse
@@ -13,18 +13,28 @@ from pathlib import Path
 SKILL_NAME = "word-skill"
 
 
-def default_skills_parent() -> Path:
+def as_skill_target(path: Path) -> Path:
+    path = path.expanduser()
+    return path if path.name == SKILL_NAME else path / SKILL_NAME
+
+
+def default_target() -> Path:
+    word_skill_home = os.environ.get("WORD_SKILL_HOME")
+    if word_skill_home:
+        return as_skill_target(Path(word_skill_home))
+    agent_skills_dir = os.environ.get("AGENT_SKILLS_DIR")
+    if agent_skills_dir:
+        return as_skill_target(Path(agent_skills_dir))
     codex_home = os.environ.get("CODEX_HOME")
     if codex_home:
-        return Path(codex_home).expanduser() / "skills"
-    return Path.home() / ".codex" / "skills"
+        return Path(codex_home).expanduser() / "skills" / SKILL_NAME
+    return Path.home() / ".codex" / "skills" / SKILL_NAME
 
 
 def resolve_target(target: Path | None) -> Path:
     if target is None:
-        return default_skills_parent() / SKILL_NAME
-    target = target.expanduser()
-    return target if target.name == SKILL_NAME else target / SKILL_NAME
+        return default_target()
+    return as_skill_target(target)
 
 
 def read_skill_name(path: Path) -> str | None:
@@ -63,8 +73,8 @@ def uninstall_skill(target: Path, dry_run: bool) -> dict:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Uninstall word-skill from a Codex skills directory.")
-    parser.add_argument("--target", type=Path, help="Target skill directory or skills parent directory. Defaults to CODEX_HOME\\skills or ~/.codex/skills.")
+    parser = argparse.ArgumentParser(description="Uninstall word-skill from an agent skills or tools directory.")
+    parser.add_argument("--target", type=Path, help="Target skill directory or skills parent directory. Defaults to WORD_SKILL_HOME, AGENT_SKILLS_DIR, CODEX_HOME\\skills\\word-skill, or ~/.codex/skills/word-skill.")
     parser.add_argument("--dry-run", action="store_true", help="Print the uninstall plan without deleting files.")
     args = parser.parse_args()
 

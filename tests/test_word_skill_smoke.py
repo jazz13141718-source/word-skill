@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import importlib.util
+import os
 import py_compile
 import shutil
 import tempfile
@@ -30,6 +31,7 @@ def validate_skill_metadata():
     require("\nname: word-skill\n" in text, "SKILL.md must declare name: word-skill.")
     require("\ndescription:" in text, "SKILL.md must include a description.")
     for relative in [
+        "agents/generic.md",
         "agents/openai.yaml",
         "assets/reference.docx",
         "references/environment-and-output.md",
@@ -38,6 +40,29 @@ def validate_skill_metadata():
         "scripts/uninstall_word_skill.py",
     ]:
         require((SKILL_DIR / relative).exists(), f"Missing required file: {relative}")
+    require((REPO_ROOT / "AGENTS.md").exists(), "Missing repository-level AGENTS.md.")
+
+
+def validate_agent_portability_text():
+    forbidden = [
+        "C:\\Users\\ADMIN",
+        "codex-runtimes",
+        "codex-primary-runtime",
+    ]
+    text_files = [
+        REPO_ROOT / "README.md",
+        REPO_ROOT / "AGENTS.md",
+        SKILL_DIR / "SKILL.md",
+        SKILL_DIR / "agents" / "generic.md",
+        SKILL_DIR / "references" / "environment-and-output.md",
+        SKILL_DIR / "scripts" / "format_docx_document.py",
+        SKILL_DIR / "scripts" / "install_word_skill.py",
+        SKILL_DIR / "scripts" / "uninstall_word_skill.py",
+    ]
+    for path in text_files:
+        text = path.read_text(encoding="utf-8-sig", errors="ignore")
+        for needle in forbidden:
+            require(needle not in text, f"Found non-portable local path marker {needle!r} in {path}")
 
 
 def compile_scripts():
@@ -51,6 +76,50 @@ def load_formatter():
     assert spec.loader is not None
     spec.loader.exec_module(module)
     return module
+
+
+def load_script_module(path: Path, module_name: str):
+    spec = importlib.util.spec_from_file_location(module_name, path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    return module
+
+
+def install_target_resolution_smoke():
+    installer = load_script_module(SKILL_DIR / "scripts" / "install_word_skill.py", "install_word_skill")
+    uninstaller = load_script_module(SKILL_DIR / "scripts" / "uninstall_word_skill.py", "uninstall_word_skill")
+    tmp_root = Path(tempfile.mkdtemp(prefix="word_skill_target_"))
+    old_env = {name: os.environ.get(name) for name in ["WORD_SKILL_HOME", "AGENT_SKILLS_DIR", "CODEX_HOME"]}
+    try:
+        for name in old_env:
+            os.environ.pop(name, None)
+
+        os.environ["AGENT_SKILLS_DIR"] = str(tmp_root / "agent-skills")
+        expected = tmp_root / "agent-skills" / "word-skill"
+        require(installer.resolve_target(None) == expected, "Installer did not honor AGENT_SKILLS_DIR.")
+        require(uninstaller.resolve_target(None) == expected, "Uninstaller did not honor AGENT_SKILLS_DIR.")
+
+        os.environ["WORD_SKILL_HOME"] = str(tmp_root / "exact" / "word-skill")
+        exact = tmp_root / "exact" / "word-skill"
+        require(installer.resolve_target(None) == exact, "Installer did not honor exact WORD_SKILL_HOME.")
+        require(uninstaller.resolve_target(None) == exact, "Uninstaller did not honor exact WORD_SKILL_HOME.")
+
+        os.environ["WORD_SKILL_HOME"] = str(tmp_root / "word-skill-parent")
+        expected_home_parent = tmp_root / "word-skill-parent" / "word-skill"
+        require(installer.resolve_target(None) == expected_home_parent, "Installer did not normalize parent WORD_SKILL_HOME.")
+        require(uninstaller.resolve_target(None) == expected_home_parent, "Uninstaller did not normalize parent WORD_SKILL_HOME.")
+
+        explicit_parent = tmp_root / "explicit-skills"
+        require(installer.resolve_target(explicit_parent) == explicit_parent / "word-skill", "Installer explicit parent target failed.")
+        require(uninstaller.resolve_target(explicit_parent) == explicit_parent / "word-skill", "Uninstaller explicit parent target failed.")
+    finally:
+        for name, value in old_env.items():
+            if value is None:
+                os.environ.pop(name, None)
+            else:
+                os.environ[name] = value
+        shutil.rmtree(tmp_root, ignore_errors=True)
 
 
 def citation_superscript_smoke():
@@ -121,7 +190,9 @@ def english_support_smoke():
 
 def main():
     validate_skill_metadata()
+    validate_agent_portability_text()
     compile_scripts()
+    install_target_resolution_smoke()
     citation_superscript_smoke()
     english_support_smoke()
     print("word-skill smoke tests passed")

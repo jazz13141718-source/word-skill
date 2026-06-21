@@ -10,8 +10,7 @@ Pipeline:
    and optional reference-list indentation.
 
 Run from PowerShell:
-  & "C:\\Users\\ADMIN\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe" `
-    "C:\\Users\\ADMIN\\.codex\\skills\\word-skill\\scripts\\format_docx_document.py"
+  & "<python>" "<word-skill>\\scripts\\format_docx_document.py" --check-env --source "<source-file>"
 """
 from __future__ import annotations
 
