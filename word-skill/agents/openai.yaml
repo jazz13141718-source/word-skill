@@ -1,0 +1,4 @@
+interface:
+  display_name: "word-skill"
+  short_description: "Format and audit Chinese or English DOCX files."
+  default_prompt: "Use $word-skill to convert or reformat this Chinese or English content into a polished DOCX with strict audit, separated final output, and render QA."

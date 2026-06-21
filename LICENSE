@@ -1,0 +1,62 @@
+word-skill Non-Commercial License 1.0
+
+Copyright (c) 2026 word-skill contributors
+
+This license is intended to keep the project publicly available for
+non-commercial use. It is not an OSI-approved open source license because it
+restricts commercial use.
+
+1. Definitions
+
+"Software" means the word-skill source code, documentation, scripts, templates,
+and bundled assets distributed with this repository.
+
+"Commercial Use" means use that is primarily intended for or directed toward
+commercial advantage, monetary compensation, paid services, resale, sublicensing
+for a fee, incorporation into a paid product, or operation as part of a paid
+service.
+
+"Derivative Work" means any modification, adaptation, translation, extension,
+fork, plugin, packaged distribution, or other work based on the Software.
+
+2. Permissions
+
+Subject to the terms below, you may use, copy, study, modify, and distribute
+the Software and Derivative Works for non-commercial purposes only.
+
+3. Non-Commercial Restriction
+
+You may not use the Software or any Derivative Work for Commercial Use without
+separate written permission from the copyright holders.
+
+4. Distribution
+
+If you distribute the Software or a Derivative Work, you must keep this license
+notice and copyright notice intact and clearly state any significant changes
+you made to the original work.
+
+This license does not require Derivative Works to use the same license, and it
+does not require Derivative Works to publish their complete source code, as long
+as all use and distribution remain non-commercial and comply with this license.
+
+5. Attribution
+
+You must preserve reasonable attribution to the original project when you copy,
+modify, or distribute the Software or a Derivative Work.
+
+6. No Trademark Rights
+
+This license does not grant trademark rights, logo rights, or rights to imply
+endorsement by the original authors.
+
+7. No Warranty
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, OR RESULTS OF USE. THE
+AUTHORS AND COPYRIGHT HOLDERS ARE NOT LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER
+LIABILITY ARISING FROM OR RELATED TO THE SOFTWARE OR THIS LICENSE.
+
+8. Separate Commercial Licensing
+
+Commercial use requires separate written permission from the copyright holders.
